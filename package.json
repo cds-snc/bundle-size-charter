@@ -31,5 +31,8 @@
     "nock": "^10.0.4",
     "prettier": "^1.15.3",
     "serverless-google-cloudfunctions": "*"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.379.0"
   }
 }

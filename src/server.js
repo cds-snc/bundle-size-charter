@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 for (let name in triggers) {
   console.info(`Reqistered function ${name}`);
 
-  app.post(`/${name}`, (request, response) => {
+  app.get(`/${name}`, (request, response) => {
     triggers[name](request.body, response);
   });
 }
