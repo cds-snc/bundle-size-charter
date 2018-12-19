@@ -1,9 +1,9 @@
-service: bundle-size-charter # NOTE: Don't put the word "google" in here
+service: bundle-size-charter 
 
 provider:
   name: google
   runtime: nodejs8
-  project: cds-snc 
+  project: bundle-size-tools 
   credentials: ~/.gcloud/keyfile.json
 
 plugins:
@@ -17,6 +17,6 @@ package:
 
 functions:
   first:
-    handler: handleEvent
+    handler: chartSize
     events:
       - http: path

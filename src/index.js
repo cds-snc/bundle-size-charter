@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.handleEvent = (request, response) => {
+module.exports.chartSize = (request, response) => {
   response.status(200).send('Hello World!');
 };
 
