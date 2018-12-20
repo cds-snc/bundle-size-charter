@@ -17,7 +17,8 @@ for (let name in triggers) {
 
 // Start the server
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+app.listen(PORT, async err => {
+  if (err) throw err;
+  console.log(`⚡ Ready on http://localhost:${PORT}`);
   console.log("Press Ctrl+C to quit.");
 });
