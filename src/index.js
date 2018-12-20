@@ -68,5 +68,6 @@ const outputResult = result => {
 module.exports.chartSize = async (request, response) => {
   const result = await getFromDynamo("cds-snc/bundle-size-tracker");
   outputResult(result);
+  console.log("LENGTH", result.length);
   response.status(200).send("Hello World!");
 };
