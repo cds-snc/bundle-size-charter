@@ -1,20 +1,16 @@
 "use strict";
 const { getFromDynamo } = require("./lib/dynamo");
-const prettyBytes = require("pretty-bytes");
-
-const format = require("date-fns/format");
-
+const randomHexColor = require("random-hex-color");
 const datasets = [];
 
-let colours = ["green", "yellow", "orange", "blue"];
-
 const setDataObj = (filename, data, index) => {
+  let colour = randomHexColor();
   return {
     label: filename,
-    borderColor: colours[index],
-    pointBorderColor: colours[index],
-    pointHoverBackgroundColor: colours[index],
-    pointHoverBorderColor: colours[index],
+    borderColor: colour,
+    pointBorderColor: colour,
+    pointHoverBackgroundColor: colour,
+    pointHoverBorderColor: colour,
     pointBackgroundColor: "#fff",
     pointBorderWidth: 1,
     pointHoverRadius: 5,
@@ -24,18 +20,11 @@ const setDataObj = (filename, data, index) => {
   };
 };
 
-/*
-
-*/
-
 const outputResult = result => {
-  let entries = [];
-
+  let labels = [];
   result.forEach(entry => {
-    const { timestamp, sha } = entry;
-
-    const ts = format(timestamp, "YYYY-MM-DD hh:mm:ss a");
-    entries.push(sha.substring(0, 6));
+    const { sha } = entry;
+    labels.push(sha.substring(0, 6));
 
     entry.data.forEach(item => {
       item.files.forEach(file => {
@@ -45,29 +34,26 @@ const outputResult = result => {
         }
 
         datasets[file.filename].data.push(file.filesize);
-        // console.log(`${file.filename} ${file.filesize}`);
       });
     });
-
-    //console.log("===========================================");
-    console.log(datasets);
   });
-
   let chartDatasets = [];
 
   Object.keys(datasets).map(function(key, index) {
     const data = datasets[key].data;
+
     chartDatasets.push(setDataObj(key, data, index));
   });
 
-  //
-  console.log(chartDatasets);
-  //
+  return {
+    labels,
+    datasets: chartDatasets
+  };
 };
 
 module.exports.chartSize = async (request, response) => {
   const result = await getFromDynamo("cds-snc/bundle-size-tracker");
-  outputResult(result);
-  console.log("LENGTH", result.length);
-  response.status(200).send("Hello World!");
+  const dataset = outputResult(result);
+  const arr = JSON.stringify(dataset, null, 4);
+  response.status(200).send(`<pre>${arr}</pre>`);
 };
