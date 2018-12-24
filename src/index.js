@@ -1,5 +1,5 @@
 "use strict";
-const { getFromDynamo } = require("./lib/dynamo");
+const { getFromFirestore } = require("./lib/firestore");
 const randomHexColor = require("random-hex-color");
 const datasets = [];
 
@@ -52,7 +52,7 @@ const outputResult = result => {
 };
 
 module.exports.chartSize = async (request, response) => {
-  const result = await getFromDynamo("cds-snc/bundle-size-tracker");
+  const result = await getFromFirestore("cds-snc/bundle-size-tracker");
   const dataset = outputResult(result);
   const arr = JSON.stringify(dataset, null, 4);
   response.status(200).send(`<pre>${arr}</pre>`);
