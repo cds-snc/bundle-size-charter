@@ -61,8 +61,8 @@ module.exports.chartSize = async (request, response) => {
         "GET query must include a repo name ex. repo=cds-snc/bundle-size-tracker-demo"
       );
   }
-
-  const result = await loadFromFirestore(request.query.repo);
+  const branch = request.query.branch || "master";
+  const result = await loadFromFirestore(request.query.repo, branch);
   console.log(result);
 
   // const dataset = outputResult(result);
