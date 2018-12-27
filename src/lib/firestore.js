@@ -23,11 +23,11 @@ switch (process.env.NODE_ENV) {
     db = admin.firestore();
 }
 
-module.exports.loadFromFirestore = async (repo, sha) => {
+module.exports.loadFromFirestore = async repo => {
   const reposRef = db.collection("bundle_sizes");
   const query = reposRef
     .where("repo", "==", repo)
-    .where("branch", "==", "refs/heads/maste")
+    .where("branch", "==", "refs/heads/master")
     .orderBy("timestamp", "desc");
   return query.get().then(resp => {
     var items = [];

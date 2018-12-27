@@ -11,7 +11,7 @@ for (let name in triggers) {
   console.info(`Reqistered function ${name}`);
 
   app.get(`/${name}`, (request, response) => {
-    triggers[name](request.body, response);
+    triggers[name](request, response);
   });
 }
 

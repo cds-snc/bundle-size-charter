@@ -1,5 +1,7 @@
 "use strict";
-const { getFromFirestore } = require("./lib/firestore");
+require("dotenv-safe").config({ allowEmptyValues: true });
+
+const { loadFromFirestore } = require("./lib/firestore");
 const randomHexColor = require("random-hex-color");
 const datasets = [];
 
@@ -52,8 +54,19 @@ const outputResult = result => {
 };
 
 module.exports.chartSize = async (request, response) => {
-  const result = await getFromFirestore("cds-snc/bundle-size-tracker");
-  const dataset = outputResult(result);
-  const arr = JSON.stringify(dataset, null, 4);
-  response.status(200).send(`<pre>${arr}</pre>`);
+  if (!request.query.hasOwnProperty("repo")) {
+    return response
+      .status(500)
+      .send(
+        "GET query must include a repo name ex. repo=cds-snc/bundle-size-tracker-demo"
+      );
+  }
+
+  const result = await loadFromFirestore(request.query.repo);
+  console.log(result);
+
+  // const dataset = outputResult(result);
+  // const arr = JSON.stringify(dataset, null, 4);
+
+  response.status(200).send(`<pre>Done</pre>`);
 };
