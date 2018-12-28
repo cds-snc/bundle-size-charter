@@ -1,3 +1,5 @@
+//const JSONfn = require("json-fn");
+
 export const chart = (data, options) => {
   return `<!DOCTYPE html>
   <html>
@@ -13,59 +15,10 @@ export const chart = (data, options) => {
       >
         <canvas id="myChart" width="200" height="200"></canvas>
       </div>
-      <script>
-        const UNITS = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-  
-        const toLocaleString = (number, locale) => {
-          let result = number;
-          if (typeof locale === "string") {
-            result = number.toLocaleString(locale);
-          } else if (locale === true) {
-            result = number.toLocaleString();
-          }
-  
-          return result;
-        };
-  
-        const bytes = (number, options) => {
-          if (!Number.isFinite(number)) {
-            throw new TypeError(
-              "Expected a finite number"
-            );
-          }
-  
-          options = Object.assign({}, options);
-  
-          if (options.signed && number === 0) {
-            return " 0 B";
-          }
-  
-          const isNegative = number < 0;
-          const prefix = isNegative ? "-" : options.signed ? "+" : "";
-  
-          if (isNegative) {
-            number = -number;
-          }
-  
-          if (number < 1) {
-            const numberString = toLocaleString(number, options.locale);
-            return prefix + numberString + " B";
-          }
-  
-          const exponent = Math.min(
-            Math.floor(Math.log10(number) / 3),
-            UNITS.length - 1
-          );
-          number = Number((number / Math.pow(1000, exponent)).toPrecision(3));
-          const numberString = toLocaleString(number, options.locale);
-  
-          const unit = UNITS[exponent];
-  
-          return prefix + numberString + " " + unit;
-        };
-  
-        var ctx = document.getElementById("myChart");
-  
+
+      <script type="module">
+        import {prettyBytes} from 'https://unpkg.com/cds-pretty-bytes@5.1.0/index.js'; 
+        const ctx = document.getElementById("myChart");
         const options = {
           legend: { position: "bottom" },
           tooltips: {
@@ -75,7 +28,7 @@ export const chart = (data, options) => {
                 if (label) {
                   label += ": ";
                 }
-                label += bytes(Math.round(tooltipItem.yLabel * 100) / 100);
+                label += prettyBytes(Math.round(tooltipItem.yLabel * 100) / 100);
                 return label;
               }
             }
@@ -90,7 +43,7 @@ export const chart = (data, options) => {
                 },
                 ticks: {
                   callback: (value, index, values) => {
-                    return bytes(value);
+                    return prettyBytes(value);
                   }
                 }
               }
@@ -105,7 +58,7 @@ export const chart = (data, options) => {
           options
         };
   
-        var myChart = new Chart(ctx, obj);
+        const myChart = new Chart(ctx, obj);
       </script>
     </body>
   </html>`;
