@@ -4,6 +4,7 @@ require("dotenv-safe").config({ allowEmptyValues: true });
 const { loadFromFirestore } = require("./lib/firestore");
 const randomHexColor = require("random-hex-color");
 const datasets = [];
+const prettyBytes = require("pretty-bytes");
 
 import { chart } from "./chart";
 
@@ -65,12 +66,43 @@ module.exports.chartSize = async (request, response) => {
   }
   const branch = request.query.branch || "master";
   const result = await loadFromFirestore(request.query.repo, branch);
-  //console.log(result);
-
   const dataset = outputResult(result);
-  const arr = JSON.stringify(dataset, null, 4);
 
-  const test = chart(arr);
-  response.status(200).send(test);
-  //response.status(200).send(`<pre>${test} ${arr}</pre>`);
+  const options = {
+    legend: { position: "bottom" },
+    tooltips: {
+      callbacks: {
+        /*
+        label: function(tooltipItem, data) {
+          var label = data.datasets[tooltipItem.datasetIndex].label || "";
+
+          if (label) {
+            label += ": ";
+          }
+          label += this.bytes(Math.round(tooltipItem.yLabel * 100) / 100);
+          return label;
+        }
+        */
+      }
+    },
+    scales: {
+      yAxes: [
+        {
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: "File size"
+          },
+          ticks: {
+            callback: (value, index, values) => {
+              //console.log("bytes", this.bytes);
+              return value;
+            }
+          }
+        }
+      ]
+    }
+  };
+  const htm = chart(dataset, options);
+  response.status(200).send(htm);
 };
