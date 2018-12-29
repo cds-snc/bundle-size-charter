@@ -17,7 +17,7 @@ module.exports.chartSize = async (request, response) => {
 
   response.render("index", {
     title: "Chart",
-    message: request.query.repo,
+    reponame: request.query.repo,
     data: JSON.stringify(dataset)
   });
 };

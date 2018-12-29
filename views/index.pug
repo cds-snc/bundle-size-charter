@@ -17,11 +17,12 @@ html
         margin-bottom:20px;
       }
   body
-    h1= message
+    h1= reponame
     div(class="chart-container" style="position: relative; max-height:50vh; max-width:100vh;")
      canvas(id="myChart" width="200" height="200")
     script.
       const ctx = document.getElementById("myChart");
+      const reponame= "!{reponame}"
       const dataset = !{data}
       const options = {
               layout: {
@@ -38,7 +39,7 @@ html
                   label: (tooltipItem, data)=> {
                     let index = tooltipItem.datasetIndex;
                     let size = prettyBytes(Math.round(tooltipItem.yLabel * 100) / 100);
-                    return  `${data.datasets[index].label}:${size}` || "";
+                    return  `${data.datasets[index].label}: ${size}` || "";
                   }
                 }
               },
@@ -63,7 +64,10 @@ html
                   },
                   listeners: {
                     click: (context) => {
-                      window.location = "https://www.example.com";
+                      const sha = dataset.labels[context.dataIndex]
+                      if(!sha) return false
+                      const uri = `https://github.com/${reponame}/commit/${sha}`
+                      window.location = uri;
                     }
                   }
                 }
