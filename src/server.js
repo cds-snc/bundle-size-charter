@@ -1,8 +1,10 @@
+require("dotenv-safe").config({ allowEmptyValues: true });
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const app = express();
 const triggers = require("./index");
+const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
 app.set("view engine", "pug");
