@@ -46,6 +46,7 @@
     "preact": "^8.4.2",
     "preact-render-to-string": "^4.1.0",
     "pretty-bytes": "^5.1.0",
+    "pug": "^2.0.3",
     "random-hex-color": "^1.0.1"
   }
 }

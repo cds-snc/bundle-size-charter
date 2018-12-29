@@ -2,11 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-app.use(cors());
-
 const triggers = require("./index");
-
+app.use(cors());
 app.use(bodyParser.json());
+app.set("view engine", "pug");
 
 for (let name in triggers) {
   console.info(`Reqistered function ${name}`);
