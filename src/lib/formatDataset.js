@@ -17,33 +17,65 @@ const setDataObj = (filename, data, index) => {
   };
 };
 
+const getFilenames = result => {
+  let filenames = [];
+  result.forEach(entry => {
+    /* get filenames */
+    entry.data.forEach(item => {
+      item.files.forEach(file => {
+        filenames.push(file.filename);
+      });
+    });
+  });
+
+  // get unique list of filenames
+  filenames = Array.from(new Set(filenames));
+
+  return filenames;
+};
+
+const initDatasets = filenames => {
+  let datasets = {};
+  filenames.forEach(file => {
+    datasets[file] = {};
+    datasets[file].data = [];
+  });
+
+  return datasets;
+};
+
+const shaFiles = entry => {
+  const files = {};
+  entry.files.forEach(file => {
+    files[file.filename] = file.filesize;
+  });
+
+  return files;
+};
+
 export const formatDataset = result => {
-  const total = result.length;
-  let datasets = [];
   let labels = [];
+  let filenames = getFilenames(result);
+  let datasets = initDatasets(filenames);
   let chartDatasets = [];
 
   result.forEach(entry => {
     const { sha } = entry;
     labels.push(sha.substring(0, 6));
 
-    entry.data.forEach(item => {
-      item.files.forEach(file => {
-        if (!datasets[file.filename]) {
-          datasets[file.filename] = {};
-          datasets[file.filename].data = [];
-        }
-        datasets[file.filename].data.push(file.filesize);
+    entry.data.forEach(entry => {
+      const files = shaFiles(entry);
+      filenames.forEach(file => {
+        let size = 0;
+        if (files[file]) size = files[file];
+        datasets[file].data.push(size);
       });
     });
   });
 
   Object.keys(datasets).map(function(key, index) {
     const data = datasets[key].data;
-    const missing = total - Number(data.length);
-    const backFill = new Array(missing).fill(0);
-    const backFilled = [...backFill, ...data];
-    chartDatasets.push(setDataObj(key, backFilled, index));
+    chartDatasets.push(setDataObj(key, data, index));
   });
 
   return {
