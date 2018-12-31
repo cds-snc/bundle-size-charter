@@ -18,6 +18,7 @@ const setDataObj = (filename, data, index) => {
 };
 
 export const formatDataset = result => {
+  const total = result.length;
   let datasets = [];
   let labels = [];
   let chartDatasets = [];
@@ -39,7 +40,10 @@ export const formatDataset = result => {
 
   Object.keys(datasets).map(function(key, index) {
     const data = datasets[key].data;
-    chartDatasets.push(setDataObj(key, data, index));
+    const missing = total - Number(data.length);
+    const backFill = new Array(missing).fill(0);
+    const backFilled = [...backFill, ...data];
+    chartDatasets.push(setDataObj(key, backFilled, index));
   });
 
   return {
