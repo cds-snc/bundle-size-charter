@@ -1,6 +1,8 @@
 "use strict";
 import { loadFromFirestore } from "./lib/firestore";
 const { formatDataset } = require("./lib/formatDataset");
+const pug = require("pug");
+const path = require("path");
 
 module.exports.chartSize = async (request, response) => {
   if (!request.query.hasOwnProperty("repo")) {
@@ -14,10 +16,11 @@ module.exports.chartSize = async (request, response) => {
   const result = await loadFromFirestore(request.query.repo, branch);
 
   const dataset = formatDataset(result);
-
-  response.render("index", {
-    title: "Chart",
-    reponame: request.query.repo,
-    data: JSON.stringify(dataset)
-  });
+  response.send(
+    pug.renderFile(path.resolve(__dirname, "template.pug"), {
+      title: "Chart",
+      reponame: request.query.repo,
+      data: JSON.stringify(dataset)
+    })
+  );
 };
