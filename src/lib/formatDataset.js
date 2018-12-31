@@ -1,5 +1,4 @@
 const randomHexColor = require("random-hex-color");
-const datasets = [];
 
 const setDataObj = (filename, data, index) => {
   let colour = randomHexColor();
@@ -19,7 +18,10 @@ const setDataObj = (filename, data, index) => {
 };
 
 export const formatDataset = result => {
+  let datasets = [];
   let labels = [];
+  let chartDatasets = [];
+
   result.forEach(entry => {
     const { sha } = entry;
     labels.push(sha.substring(0, 6));
@@ -34,7 +36,6 @@ export const formatDataset = result => {
       });
     });
   });
-  let chartDatasets = [];
 
   Object.keys(datasets).map(function(key, index) {
     const data = datasets[key].data;
