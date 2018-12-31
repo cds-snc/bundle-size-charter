@@ -20,6 +20,7 @@ module.exports.chartSize = async (request, response) => {
     pug.renderFile(path.resolve(__dirname, "template.pug"), {
       title: "Chart",
       reponame: request.query.repo,
+      branch: branch,
       data: JSON.stringify(dataset)
     })
   );

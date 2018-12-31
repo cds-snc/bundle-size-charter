@@ -22,7 +22,7 @@ export const formatDataset = result => {
   let labels = [];
   result.forEach(entry => {
     const { sha } = entry;
-    labels.push(sha.substring(0, 6));
+    labels.push(`View:${sha.substring(0, 6)}`);
 
     entry.data.forEach(item => {
       item.files.forEach(file => {

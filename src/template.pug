@@ -17,7 +17,7 @@ html
         margin-bottom:20px;
       }
   body
-    h1= reponame
+    h1 #{reponame} / git:(#{branch})
     div(style="position: relative; max-height:50vh; max-width:100vh;")
      canvas(id="myChart" width="200" height="200")
     script.
@@ -64,7 +64,8 @@ html
                   },
                   listeners: {
                     click: (context) => {
-                      const sha = dataset.labels[context.dataIndex]
+                      let sha = dataset.labels[context.dataIndex]
+                      sha = sha.replace("View:","")
                       if(!sha) return false
                       const uri = `https://github.com/${reponame}/commit/${sha}`
                       window.location = uri;
