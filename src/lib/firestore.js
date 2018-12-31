@@ -28,7 +28,7 @@ module.exports.loadFromFirestore = async (repo, branch) => {
   const query = reposRef
     .where("repo", "==", repo)
     .where("branch", "==", `refs/heads/${branch}`)
-    .orderBy("timestamp", "desc");
+    .orderBy("timestamp", "asc");
   return query.get().then(resp => {
     var items = [];
     resp.forEach(r => items.push(r.data()));

@@ -22,7 +22,7 @@ export const formatDataset = result => {
   let labels = [];
   result.forEach(entry => {
     const { sha } = entry;
-    labels.push(`View:${sha.substring(0, 6)}`);
+    labels.push(sha.substring(0, 6));
 
     entry.data.forEach(item => {
       item.files.forEach(file => {
@@ -30,7 +30,6 @@ export const formatDataset = result => {
           datasets[file.filename] = {};
           datasets[file.filename].data = [];
         }
-
         datasets[file.filename].data.push(file.filesize);
       });
     });
@@ -39,7 +38,6 @@ export const formatDataset = result => {
 
   Object.keys(datasets).map(function(key, index) {
     const data = datasets[key].data;
-
     chartDatasets.push(setDataObj(key, data, index));
   });
 

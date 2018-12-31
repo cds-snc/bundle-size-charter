@@ -64,8 +64,7 @@ html
                   },
                   listeners: {
                     click: (context) => {
-                      let sha = dataset.labels[context.dataIndex]
-                      sha = sha.replace("View:","")
+                      const sha = dataset.labels[context.dataIndex]
                       if(!sha) return false
                       const uri = `https://github.com/${reponame}/commit/${sha}`
                       window.location = uri;
