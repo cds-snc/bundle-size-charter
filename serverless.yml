@@ -4,7 +4,7 @@ provider:
   name: google
   runtime: nodejs8
   project: bundle-size-tools 
-  credentials: ~/.gcloud/keyfile.json
+  credentials: keyfile.json
 
 plugins:
   - serverless-google-cloudfunctions
