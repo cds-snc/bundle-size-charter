@@ -1,5 +1,6 @@
 "use strict";
-import { loadFromFirestore } from "./lib/firestore";
+
+const { loadFromFirestore } = require("./lib/firestore");
 const { formatDataset } = require("./lib/formatDataset");
 const pug = require("pug");
 const path = require("path");
