@@ -1,10 +1,13 @@
 const admin = require("firebase-admin");
-
+const path = require("path");
 let db;
 
 switch (process.env.NODE_ENV) {
   case "dev":
-    const serviceAccount = require("../../../bundle-size-tools-firebase-adminsdk.json");
+    const serviceAccount = require(path.resolve(
+      __dirname,
+      "../../../bundle-size-tools-firebase-adminsdk.json"
+    ));
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
       databaseURL: process.env.FIRESTORE_URL
@@ -13,7 +16,11 @@ switch (process.env.NODE_ENV) {
     break;
   case "test":
     const MockCloudFirestore = require("mock-cloud-firestore");
-    const { fixtureData } = require("../__mocks__/firestore.js");
+    const { fixtureData } = require(path.resolve(
+      __dirname,
+      "../__mocks__/firestore.js"
+    ));
+
     let firebase = new MockCloudFirestore(fixtureData);
     db = firebase.firestore();
     break;
